@@ -113,6 +113,10 @@ if __name__ == '__main__':
         # xhx_mysql.create_goods_type_table()
         # xhx_mysql.alter_add_table('user', 'height', 'decimal(5,2) null default null comment "身高"')
         # xhx_mysql.alter_modify_table(db, cursor, 'user', 'age', "tinyint null default null comment '年龄'"
+        data = [{'username': '刘梦琪', 'age': 29, 'sex': '女', 'height': 169}, {'username': '夏浩轩', 'age': 28, 'sex': '男', 'height': 173}]
+
+        data1 = {'username': '刘梦琪', 'age': 29, 'sex': '女', 'height': 169}
+        
         xhx_mysql.insert_into_table('user', {'username': '刘梦琪', 'age': 29, 'sex': '女', 'height': 169})
 
     else:
