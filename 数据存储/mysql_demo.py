@@ -2,6 +2,8 @@
 import pymysql
 from pymysql import err
 import time
+import re
+
 
 class xhx_mysql(object):
 
@@ -23,7 +25,11 @@ class xhx_mysql(object):
         except err.OperationalError as f:
             print('错误信息:{}'.format(f))
 
-    # 表结构操作
+    def close_connect(self):
+        # 关闭数据库连接
+        self.db.close()
+
+    # ----------------------------------------------------表结构操作-----------------------------------------------------
     def create_goods_type_table(self):
         drop_sql = """drop table if exists goods_type"""
         self.cursor.execute(drop_sql)
@@ -50,6 +56,7 @@ class xhx_mysql(object):
         try:
             self.cursor.execute(create_sql)
             self.db.commit()
+            self.cursor.close()
         except:
             self.db.rollback()
 
@@ -65,6 +72,7 @@ class xhx_mysql(object):
         try:
             self.cursor.execute(alter_sql)
             self.db.commit()
+            self.cursor.close()
         except:
             self.db.rollback()
 
@@ -80,27 +88,32 @@ class xhx_mysql(object):
         try:
             self.cursor.execute(alter_sql)
             self.db.commit()
+            self.cursor.close()
         except:
             self.db.rollback()
 
-
-    # 表数据操作
-
-
-
-    def close_connect(self):
-        # 关闭数据库连接
-        self.db.close()
+    # ----------------------------------------------------表数据操作-----------------------------------------------------
+    def insert_into_table(self, table_name, data):
+        key, value = str(tuple(data.keys())), str(tuple(data.values()))
+        key = re.sub("'", '', key)
+        insert_sql = """INSERT INTO %s %s VALUES %s""" % (table_name, key, value)
+        try:
+            self.cursor.execute(insert_sql)
+            self.db.commit()
+            self.cursor.close()
+        except:
+            self.db.rollback()
 
 
 if __name__ == '__main__':
     xhx_mysql = xhx_mysql()
     xhx_mysql.create_connect()
     if xhx_mysql.db:
+
         # xhx_mysql.create_goods_type_table()
         # xhx_mysql.alter_add_table('user', 'height', 'decimal(5,2) null default null comment "身高"')
-        # xhx_mysql.alter_modify_table(db, cursor, 'user', 'age', "tinyint null default null comment '年龄'")
-
+        # xhx_mysql.alter_modify_table(db, cursor, 'user', 'age', "tinyint null default null comment '年龄'"
+        xhx_mysql.insert_into_table('user', {'username': '刘梦琪', 'age': 29, 'sex': '女', 'height': 169})
 
     else:
         print("断开连接")
