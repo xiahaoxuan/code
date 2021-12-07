@@ -13,14 +13,21 @@ url = 'https://www.lagou.com/jobs/v2/positionAjax.json'
 data = {
     'first': 'true',
     'needAddtionalResult': 'false',
-    'city': '全国',
+    'city': '长沙',
     'px': 'new',
     'kd': 'Python'
 }
 
-for x in range(1, 30):
+for x in range(1, 3):
     data['pn'] = x
     response = requests.post(url, headers=headers, data=data)
     positions = response.json()["content"]["positionResult"]["result"]
-    # time.sleep(1)
-    print(positions)
+    result_list = []
+    for position in positions:
+        params = {"positionName": position["positionName"],
+                  "companyShortName": position["companyShortName"],
+                  "companySize": position["companySize"],
+                  "financeStage": position["financeStage"]
+                  }
+        result_list.append(params)
+    print(result_list)
