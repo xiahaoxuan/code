@@ -13,11 +13,18 @@ class xhx_mysql(object):
 
     def create_connect(self):
         try:
+            # self.db = pymysql.connect(
+            #     host='localhost',
+            #     port=3306,
+            #     user='root',
+            #     password='54Haoxuan!',
+            #     database='kuaidaili_ip'
+            # )
             self.db = pymysql.connect(
-                host='localhost',
+                host='192.168.116.128',
                 port=3306,
                 user='root',
-                password='54Haoxuan!',
+                password='940628',
                 database='kuaidaili_ip'
             )
             self.db.ping()

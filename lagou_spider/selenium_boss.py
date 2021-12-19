@@ -6,6 +6,7 @@ from selenium import webdriver
 from lxml import etree
 
 import proxy_option
+from proxy_request import kd_request
 
 
 class LagouSpider(object):
@@ -25,7 +26,7 @@ class LagouSpider(object):
             except Exception as e:
                 print(e.args[0])
                 return
-            # time.sleep(3)
+            time.sleep(3)
             source = self.driver.page_source
             result = self.parse_list_page(source)
             if result == 0:
@@ -42,7 +43,7 @@ class LagouSpider(object):
                 if status == 403:
                     print('ip被封')
                     return 0
-            except IndexError as e:
+            except Exception as e:
                 try:
                     button = str(html.xpath('//*[@class="btn"]/text()')[0])
                     if button == '点击进行验证':
@@ -50,7 +51,7 @@ class LagouSpider(object):
                     else:
                         print('ip被封')
                     return 0
-                except IndexError as e:
+                except Exception as e:
                     print('请求失败，换个ip')
                     return 0
         result_list = []
@@ -65,15 +66,15 @@ class LagouSpider(object):
             result_list.append(params)
         print('=' * 100)
         print(result_list)
-        return 1
+        # return 1
 
 
 if __name__ == '__main__':
     #
     # proxy_ip = proxy_option.proxy_ip
-    proxy_ip = 'http://180.116.12.57:16487'
+    kd = kd_request()
+    proxy_ip = kd.find_ip()
     print(proxy_ip)
-    # proxy_ip = 'http://180.125.187.147:23778'
     proxy = '--proxy-server={0}'.format(proxy_ip)
     LagouSpider(proxy).run()
 

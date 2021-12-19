@@ -1,0 +1,8 @@
+
+# 配置文件
+
+# APPID = 'wx3fbd00d000d911a1'
+# APPSECRET = 'df11f7a6397bb823f261e2732cb12e06'
+APPID = 'wxa1d5538ca86c3f58'
+APPSECRET = '4e1f88fcd456e40dddc4ef27a2916a36'
+WECHAT_TOKEN = 'rongzihuanbao'

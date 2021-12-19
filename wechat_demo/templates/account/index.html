@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta charset="utf-8">
+	<title>能源管理系统</title>
+	<meta name="author" content="Gaoyiping (iam@gaoyiping.com)">
+	<meta name="robots" content="noindex, nofollow">
+	<meta name="renderer" content="webkit"/>
+	<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1.0">
+	<meta http-equiv="pragma" content="no-cache">
+	<meta http-equiv="Cache-Control" content="no-store, must-revalidate">
+	<meta http-equiv="expires" content="0">
+	<link rel="shortcut icon" href="/static/img/favicon.png">
+	<link rel="stylesheet" href="/static/css/bootstrap.min-2.1.css">
+	<link rel="stylesheet" href="/static/css/plugins-2.1.css">
+	<link rel="stylesheet" href="/static/css/main-2.1.css">
+	<script src="/static/js/vendor/modernizr-2.8.3.min.js"></script>
+</head>
+<script type="text/javascript">
+	var flag = '{{flag}}';
+	if (flag == 1){
+		setTimeout(()=> {
+        	alert('解绑成功，请重新绑定')
+    	},400);
+	}
+	function Login(){
+		var username = $("#login-email").val();
+		var password = $("#login-password").val();
+		 $.ajax({
+            url:"check",
+            data:JSON.stringify({'username': username,'password': password}),
+            type: 'POST',
+            contentType: 'json',
+            async: false,
+            success: function (d) {
+                alert("success!"+d)
+				window.location.href= "{{url_for('notification.index')}}";
+            }
+        });
+		return false;
+	}
+
+</script>
+<body>
+	<img src="/static/images/website.jpg" alt="Full Background" class="full-bg full-bg-bottom animation-pulseSlow">
+	<div style="background-color: rgba(0, 0, 0, 0.35); padding-left: 1.5em; padding-right: 1.5em; padding-bottom: 0.5em; border-radius: 10px" id="login-container">
+		<h1 class="h2 text-light text-center push-top-bottom animation-slideDown" style="margin-bottom:4px;"><strong>能源管理系统</strong></h1>
+		<p class="text-light text-center push-top-bottom animation-slideDown" style="margin-top:4px;">ENERGY MANAGEMENT SYSTEM</p>
+		<div class="animation-fadeInQuickInv">
+			<form id="form-login" action='' method="post" class="form-horizontal" onsubmit="return Login();">
+				<input type="hidden" name="openid" value={{ open_id }}/>
+			<div class="form-group">
+				<div class="col-xs-12">
+					{% if username %}
+						<input type="text" style="opacity:0.7" id="login-email" name="login-name" class="form-control" placeholder="用户名" required="required" value={{username}}>
+					{% else %}
+						<input type="text" style="opacity:0.7" id="login-email" name="login-name" class="form-control" placeholder="用户名" required="required" autofocus>
+					{% endif %}
+
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-xs-12">
+                    {% if username %}
+						<input type="password" style="opacity:0.7" id="login-password" name="login-password" class="form-control" placeholder="密　码" autofocus required="required">
+					{% else %}
+						<input type="password" style="opacity:0.7" id="login-password" name="login-password" class="form-control" placeholder="密　码" required="required">
+					{% endif %}
+				</div>
+			</div>
+			<div class="form-group form-actions">
+				<div class="col-xs-8">&nbsp;</div>
+				<div class="col-xs-4 text-right">
+					<button type="submit" style="opacity:0.7" class="btn btn-sm btn-info"><i class="fa fa-check"></i> 绑定</button>
+				</div>
+			</div>
+			</form>
+		</div>
+		<footer class="text-muted text-center animation-pullUp">
+			<small>&copy; <span id="year-copy"></span> <a href="http://www.rzyckz.com/" target="_blank">融自科技</a></small>
+		</footer>
+	</div>
+	<script src="/static/jquery2.2.3.min.js"></script>
+	<script src="/static/js/vendor/bootstrap.min-2.1.js"></script>
+	<script src="/static/js/app-2.1.js"></script>
+</body>
+</html>

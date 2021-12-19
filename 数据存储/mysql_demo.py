@@ -116,7 +116,7 @@ if __name__ == '__main__':
         data = [{'username': '刘梦琪', 'age': 29, 'sex': '女', 'height': 169}, {'username': '夏浩轩', 'age': 28, 'sex': '男', 'height': 173}]
 
         data1 = {'username': '刘梦琪', 'age': 29, 'sex': '女', 'height': 169}
-        
+
         xhx_mysql.insert_into_table('user', {'username': '刘梦琪', 'age': 29, 'sex': '女', 'height': 169})
 
     else:

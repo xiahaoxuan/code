@@ -1,0 +1,94 @@
+@CHARSET "UTF-8";
+/* main-2.1.css RESET */
+.media-items, .block-station {
+	background: white;
+	box-shadow: 0 2px 4px rgba(75, 75, 75, 0.3);
+}
+.strong {
+	font-weight: bold;
+}
+.server-time {
+	width: 100px !important;
+	top: 50px !important;
+	left: initial !important;
+	margin: 0px !important;
+	padding-right: 1em !important;
+	text-align: right !important;
+	pointer-events: none !important;
+}
+.whitespace {
+	line-height: 0.5;
+	width: 200px;
+	border-bottom: 1px solid #DADDE2;
+	margin-bottom: 0.5em;
+}
+.pie-chart {
+	margin-bottom: 20px;
+}
+/* Tab页 */
+.controller_tab.tab-content{
+	padding-top: 1.5em;
+}
+.controller_tab.tab-content .tab-pane{
+	min-height: 328px;
+}
+.input_number .input-group-btn{
+	font-size: 1em;
+}
+/* 抖动效果 */
+.shake {
+	-webkit-animation-name: shake-bell;
+	animation-name: shake-bell;
+	-webkit-animation-duration: 5s;
+	animation-duration: 5s;
+	-webkit-animation-iteration-count: infinite;
+	animation-iteration-count: infinite;
+	-webkit-animation-timing-function: ease-in-out;
+	animation-timing-function: ease-in-out;
+	-webkit-animation-delay: 0s;
+	animation-delay: 0s;
+	-webkit-animation-play-state: running;
+	animation-play-state: running
+}
+
+@keyframes shake-bell {
+0%  { transform: translate(0px, 0px) rotate(0deg) }
+2%  { transform: translate(0px, 0px) scale(1.4); color: yellow }
+4%  { transform: translate(0px, 0px) rotate(-15deg) scale(1.4); color: yellow }
+6%  { transform: translate(0px, 0px) rotate(15deg) scale(1.4); color: yellow }
+8%  { transform: translate(0px, 0px) rotate(-15deg) scale(1.4); color: yellow }
+10%  { transform: translate(0px, 0px) rotate(15deg) scale(1.4); color: yellow }
+12% { transform: translate(0px, 0px) rotate(-15deg) scale(1.4); color: yellow }
+14% { transform: translate(0px, 0px) rotate(15deg) scale(1.4); color: yellow }
+16% { transform: translate(0px, 0px) rotate(-15deg) scale(1.4); color: yellow }
+18% { transform: translate(0px, 0px) rotate(0deg); color: yellow }
+}
+
+#AlertBox {
+	background: rgba(0,0,0,0.15);
+	cursor: pointer;
+}
+
+/**
+ * BootstrapValidator (http://bootstrapvalidator.com)
+ * The best jQuery plugin to validate form fields. Designed to use with Bootstrap 3
+ */
+.bv-form .help-block {
+	margin-bottom: 0;
+}
+.bv-form .tooltip-inner {
+	text-align: left;
+}
+.nav-tabs li.bv-tab-success > a {
+	color: #3c763d;
+}
+.nav-tabs li.bv-tab-error > a {
+	color: #a94442;
+}
+.bv-form .bv-icon-no-label {
+	top: 0;
+}
+.bv-form .bv-icon-input-group {
+	top: 0;
+	z-index: 100;
+}
