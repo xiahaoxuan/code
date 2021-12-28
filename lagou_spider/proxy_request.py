@@ -36,20 +36,18 @@ class kd_request(object):
         print('查找到{}条数据'.format(row_count))
         return result, row_count
 
-
-if __name__ == '__main__':
-    kd = kd_request()
-    mysql = xhx_mysql()
-    mysql.create_connect()
-    result, row_count = kd.find_data(mysql)
-    if row_count == 0:
-        proxy_ip = kd.request_ip()
-        kd.insert_data(mysql, proxy_ip)
-    else:
-        print(result)
-
-
-
+    def find_ip(self):
+        mysql = xhx_mysql()
+        mysql.create_connect()
+        result, row_count = self.find_data(mysql)
+        if row_count == 0:
+            proxy_ip = self.request_ip()
+            self.insert_data(mysql, proxy_ip)
+            return 'http://' + proxy_ip
+        else:
+            last_result = result[-1]
+            proxy_ip = last_result[3]
+            return 'http://' + proxy_ip
 
 
 # 用户名密码认证(私密代理/独享代理)
