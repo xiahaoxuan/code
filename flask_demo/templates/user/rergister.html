@@ -15,7 +15,7 @@
 <h1>欢迎注册京东用户</h1>
 <div>
 
-    <form action="/register" method="post">
+    <form action={{ url_for('user.register') }} method="post">
         <p><input type="text" name="username" placeholder="请输入用户名"></p>
         <p><input type="text" name="address" placeholder="请输入地址"></p>
         <p><input type="submit" value="提交"></p>
