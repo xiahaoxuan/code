@@ -10,8 +10,15 @@
         document.getElementById('username').innerHTML = user;
     }
 
+
 </script>
 <body>
+
     <div id="username"></div>
+<br>
+{{ '%s is %d years old' | format('lily',18) }}
+<br>
+{{ 'hello world' | truncate(6) }}
+<br>
 </body>
 </html>
