@@ -5,7 +5,6 @@ import threading
 from app import creat_app
 from flask_script import Manager
 from flask_migrate import Migrate, MigrateCommand
-from app.user.models import User
 from ext import db
 
 app = creat_app()
