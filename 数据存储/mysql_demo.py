@@ -14,11 +14,11 @@ class xhx_mysql(object):
     def create_connect(self):
         try:
             self.db = pymysql.connect(
-                host='192.168.116.128',
+                host='192.168.2.103',
                 port=3306,
                 user='root',
                 password='940628',
-                database='pymysql_test'
+                database='code_test'
             )
             self.db.ping()
             self.cursor = self.db.cursor()
@@ -94,14 +94,77 @@ class xhx_mysql(object):
 
     # ----------------------------------------------------表数据操作-----------------------------------------------------
     def insert_into_table(self, table_name, data):
-        key, value = str(tuple(data.keys())), str(tuple(data.values()))
-        key = re.sub("'", '', key)
-        insert_sql = """INSERT INTO %s %s VALUES %s""" % (table_name, key, value)
+        """
+        添加数据
+        :param table_name: 表名称
+        :param data: 数据，传一个列表字典
+        :return:
+        """
+        data_list = []
+        if data:
+            for i in data:
+                key, value = tuple(i.keys()), tuple(i.values())
+                data_list.append(value)
+            value = re.sub(r"^\[|\]$", '', str(data_list))
+            key = re.sub("'", '', str(key))
+            insert_sql = """INSERT INTO %s %s VALUES %s""" % (table_name, key, value)
+            try:
+                self.cursor.execute(insert_sql)
+                self.db.commit()
+                self.cursor.close()
+            except:
+                self.db.rollback()
+
+    def delete_table(self, table_name, condition):
+        """
+        更新数据
+        :param table_name: 表名称
+        :param condition: 条件
+        :return:
+        """
+        delete_sql = """DELETE FROM %s WHERE %s""" % (table_name, condition)
         try:
-            self.cursor.execute(insert_sql)
+            self.cursor.execute(delete_sql)
             self.db.commit()
             self.cursor.close()
         except:
+            self.db.rollback()
+
+    def update_table(self, table_name, data, condition):
+        """
+        更新数据
+        :param table_name: 表名称
+        :param data: 数据
+        :param condition: sql条件
+        :return:
+        """
+        values = ""
+        for key, value in data.items():
+            values += ", %s='%s'" % (key, value) if values else "%s='%s'" % (key, value)
+        delete_sql = """UPDATE %s SET %s WHERE %s""" % (table_name, values, condition)
+        try:
+            self.cursor.execute(delete_sql)
+            self.db.commit()
+            self.cursor.close()
+        except:
+            self.db.rollback()
+
+    def find_all_table(self, table_name, condition):
+        """
+        查询所有数据
+        :param table_name: 表名称
+        :param condition: sql条件
+        :return: 查询结果
+        """
+        find_all_sql = """SELECT * FROM %s WHERE %s""" % (table_name, condition)
+        try:
+            self.cursor.execute(find_all_sql)
+            find_result = self.cursor.fetchall()
+            row_count = self.cursor.rowcount
+            self.db.commit()
+            self.cursor.close()
+            return find_result, row_count
+        except Exception as e:
             self.db.rollback()
 
 
@@ -109,10 +172,19 @@ if __name__ == '__main__':
     xhx_mysql = xhx_mysql()
     xhx_mysql.create_connect()
     if xhx_mysql.db:
-
         # xhx_mysql.create_goods_type_table()
         # xhx_mysql.alter_add_table('user', 'height', 'decimal(5,2) null default null comment "身高"')
         # xhx_mysql.alter_modify_table(db, cursor, 'user', 'age', "tinyint null default null comment '年龄'"
+
+        # data = [{'username': '刘梦琪', 'age': 29, 'sex': '女', 'height': 169},
+        #         {'username': '夏浩轩', 'age': 28, 'sex': '男', 'height': 173}]
+        # xhx_mysql.insert_into_table('user', data)
+        # xhx_mysql.delete_table('user', "username='%s'" % '夏浩轩')
+        # data = {"username": '夏浩轩', 'age': 28, 'sex': '男', 'height': 179}
+        # xhx_mysql.update_table('user', data, "id=%d AND age=%d" % (21, 28))
+        result, row_count = xhx_mysql.find_all_table('user', 'id > %d' % 21)
+        print(result, row_count)
+
         data = [{'username': '刘梦琪', 'age': 29, 'sex': '女', 'height': 169}, {'username': '夏浩轩', 'age': 28, 'sex': '男', 'height': 173}]
 
         data1 = {'username': '刘梦琪', 'age': 29, 'sex': '女', 'height': 169}
