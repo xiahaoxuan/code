@@ -1,7 +1,7 @@
 from flask import Flask
 
 from setting import DefaultConfig
-from app.user.view import user_bp
+from apps.user.view import user_bp
 from ext import db
 
 

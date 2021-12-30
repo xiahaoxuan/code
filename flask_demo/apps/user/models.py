@@ -5,7 +5,7 @@ from ext import db
 
 class User(db.Model):
     # 定义表名
-    __tablename__ = 'user'
+    __tablename__ = 'user_role'
     # 定义列对象
     id = db.Column(db.INT, primary_key=True, autoincrement=True)  # 主键，自动递增
     username = db.Column(db.String(255), nullable=False) # 不允许为空
