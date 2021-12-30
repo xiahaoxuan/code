@@ -1,11 +1,10 @@
+from exts import db
 import datetime
-
-from ext import db
 
 
 class User(db.Model):
     # 定义表名
-    __tablename__ = 'user_role'
+    __tablename__ = 'user'
     # 定义列对象
     id = db.Column(db.INT, primary_key=True, autoincrement=True)  # 主键，自动递增
     username = db.Column(db.String(255), nullable=False)  # 不允许为空
@@ -17,7 +16,3 @@ class User(db.Model):
     #     return '<User {}> '.format(self.username)
 
 
-from app import app
-
-with app.app_context():
-    db.create_session()
