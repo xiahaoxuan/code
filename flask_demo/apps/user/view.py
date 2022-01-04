@@ -5,20 +5,7 @@ user_bp = Blueprint('user', __name__)
 
 @user_bp.route('/')
 def main():
-    # dict_user = {
-    #     'username': '备案学习界面'
-    # }
-    # result_all = User.query.all()
-    # result = result_all[0]
-    # print(result.username)
-    # username = '张三'
-    # password = '456789'
-    # dict_user = {'username':username, 'password': password}
-    # user = User(**dict_user)
-    # db.session.add(user)
-    # db.session.commit()
-    # response = render_template('main/index.html', user=dict_user)
-    return 'hello world123'
+    return render_template('base.html')
 
 
 @user_bp.route('/index')
