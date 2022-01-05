@@ -19,3 +19,6 @@ class DefaultConfig(object):
     SQLALCHEMY_DATABASE_URI = DB_URI
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_ECHO = True
+
+    # 缓存
+    SECRET_KEY = 'kdjklfjkd87384hjdhjh'
