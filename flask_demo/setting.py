@@ -22,3 +22,9 @@ class DefaultConfig(object):
 
     # 缓存
     SECRET_KEY = 'kdjklfjkd87384hjdhjh'
+
+
+    # 网易秘钥
+    secreatID = "15b731d381bce5120d5a82fa87818484"
+    secreatKey = "090be1319d966d926f320681e2069dc1"
+    businessId = "06136123823347ffa6dafebc4311549a"

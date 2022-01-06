@@ -89,7 +89,7 @@ def send_message():
     phone = request.args.get('phone')
     user = User.query.filter_by(phone=phone).first()
     if user:
-        pass
+        return jsonify(code=200, msg='没有此用户信息')
     else:
         return jsonify(code=400, msg='没有此用户信息')
 
