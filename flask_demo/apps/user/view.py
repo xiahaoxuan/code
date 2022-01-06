@@ -1,9 +1,12 @@
-from flask import Blueprint, render_template, make_response, request, session, redirect, url_for, jsonify
+import json
+
+from flask import Blueprint, render_template, current_app, request, session, redirect, url_for, jsonify
 from sqlalchemy import or_
 
 from apps.user.models import User
 from werkzeug.security import generate_password_hash, check_password_hash
 from ext import db
+from ext.smssend import SmsSendAPIDemo
 
 user_bp = Blueprint('user', __name__)
 
@@ -70,7 +73,24 @@ def login():
         elif f == '2':  # 手机号码登录
             phone = request.form.get('phone')
             code = request.form.get('code')
-
+            requestId = session.get(phone)
+            # 验证code
+            params = {
+                "requestId": requestId,
+                "code": code,
+            }
+            api = common_api()
+            ret = api.check(params)
+            print(ret)
+            # 查询数据库
+            user = User.query.filter(User.phone == phone).first()
+            print(user)
+            if user:
+                # 登录成功
+                session['uid'] = user.id
+                return redirect(url_for('user.main'))
+            else:
+                return render_template('user/login.html', msg='此号码未注册')
             # user = User.query.filter_by(phone=)
     else:
         return render_template('user/login.html')
@@ -89,9 +109,27 @@ def send_message():
     phone = request.args.get('phone')
     user = User.query.filter_by(phone=phone).first()
     if user:
-        return jsonify(code=200, msg='没有此用户信息')
+        params = {
+            "mobile": phone,
+            "templateId": "13484",
+            "paramType": "json",
+            "params": json.dumps({"code":123})
+        }
+        api = common_api()
+        ret = api.send(params)
+        print(ret)
+        session[phone] = '189075'
+        return jsonify(code=200, msg='短信发送成功！')
     else:
         return jsonify(code=400, msg='没有此用户信息')
+
+# 公共方法
+def common_api():
+    secret_Id = current_app.config["WANGYI_SECRET_ID"]
+    secret_Key = current_app.config["WANGYI_SECRET_KEY"]
+    business_Id = current_app.config["WANGYI_BUSINESSID"]
+    api = SmsSendAPIDemo(secret_Id, secret_Key, business_Id)
+    return api
 
 
 # 验证手机号码

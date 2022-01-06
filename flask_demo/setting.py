@@ -25,6 +25,6 @@ class DefaultConfig(object):
 
 
     # 网易秘钥
-    secreatID = "15b731d381bce5120d5a82fa87818484"
-    secreatKey = "090be1319d966d926f320681e2069dc1"
-    businessId = "06136123823347ffa6dafebc4311549a"
+    WANGYI_SECRET_ID = "15b731d381bce5120d5a82fa87818484"
+    WANGYI_SECRET_KEY = "090be1319d966d926f320681e2069dc1"
+    WANGYI_BUSINESSID = "06136123823347ffa6dafebc4311549a"

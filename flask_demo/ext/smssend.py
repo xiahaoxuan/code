@@ -10,7 +10,7 @@ python版本：python2.7
 __author__ = 'yidun-dev'
 __version__ = '0.1-dev'
 
-from  hashlib import md5
+from hashlib import md5
 import json
 import random
 import time
@@ -21,6 +21,7 @@ import urllib.request
 class SmsSendAPIDemo(object):
     """易盾短信发送接口示例代码"""
     API_URL = "https://sms.dun.163.com/v2/sendsms"
+    CHECK_URL = "https://sms.dun.163.com/v2/verifysms"
     VERSION = "v2"
 
     def __init__(self, secret_id, secret_key, business_id):
@@ -71,6 +72,25 @@ class SmsSendAPIDemo(object):
         except Exception as ex:
             print("调用API接口失败:", str(ex))
 
+    def check(self, params):
+        """
+        效验数据
+        """
+        params["secretId"] = self.secret_id
+        params["businessId"] = self.business_id
+        params["version"] = self.VERSION
+        params["timestamp"] = int(time.time() * 1000)
+        params["nonce"] = int(random.random() * 100000000)
+        params["signature"] = self.gen_signature(params)
+        try:
+            params = urllib.parse.urlencode(params)
+            params = params.encode('utf-8')
+            request = urllib.request.Request(self.CHECK_URL, params)
+            content = urllib.request.urlopen(request, timeout=5).read()
+            return json.loads(content)
+        except Exception as ex:
+            print("数据效验API失败:", str(ex))
+
 
 if __name__ == "__main__":
     """示例代码入口"""
@@ -82,7 +102,7 @@ if __name__ == "__main__":
     params = {
         "mobile": "13348685262",
         "templateId": "10084",
-		"paramType": "json",
+        "paramType": "json",
         "params": "json格式字符串"
         # 国际短信对应的国际编码(非国际短信接入请注释掉该行代码)
         # "internationalCode": "对应的国家编码"
@@ -93,4 +113,4 @@ if __name__ == "__main__":
             taskId = ret["data"]["taskId"]
             print("taskId = %s" % taskId)
         else:
-            print ("ERROR: ret.code=%s,msg=%s" % (ret['code'], ret['msg']))
+            print("ERROR: ret.code=%s,msg=%s" % (ret['code'], ret['msg']))
