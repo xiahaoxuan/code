@@ -1,6 +1,6 @@
 import json
 
-from flask import Blueprint, render_template, current_app, request, session, redirect, url_for, jsonify
+from flask import Blueprint, render_template, current_app, request, session, redirect, url_for, jsonify, g
 from sqlalchemy import or_
 
 from apps.user.models import User
@@ -9,6 +9,23 @@ from ext import db
 from ext.smssend import SmsSendAPIDemo
 
 user_bp = Blueprint('user', __name__)
+
+required_login_list = ['/user/center', '/user/change']
+
+
+# ****重点*****
+@user_bp.before_app_request
+def before_request1():
+
+    if request.path in required_login_list:
+        print('before_request', request.path)
+        id = session.get('uid')
+        if not id:
+            return redirect(url_for('user.login'))
+        else:
+            user = User.query.get(id)
+            # g对象，本次请求的对象
+            g.user = user
 
 
 # 首页
@@ -138,16 +155,26 @@ def check_phone():
     phone = request.args.get('phone')
     user = User.query.filter(User.phone == phone).first()
     # code: 400 不能用    200 可以用
-    if user > 0:
+    if user:
         return jsonify(code=400, msg='此号码已被注册')
     else:
         return jsonify(code=200, msg='此号码可用')
 
 
 # 修改用户信息
-@user_bp.route('/user/change')
+@user_bp.route('/user/change', methods=["GET", "POST"])
 def user_change():
-    return '修改用户'
+    if request.method == "POST":
+        username = request.form.get('username')
+        phone = request.form.get('phone')
+        email = request.form.get('email')
+        icon = request.files.get('icon')
+        user = g.user
+        user.username = username
+        user.phone = phone
+        user.email = email
+        db.session.commit()
+    return render_template('user/center.html', user=g.user)
 
 
 # 用户中心
