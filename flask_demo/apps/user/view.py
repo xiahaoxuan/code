@@ -16,9 +16,8 @@ required_login_list = ['/user/center', '/user/change']
 # ****重点*****
 @user_bp.before_app_request
 def before_request1():
-
+    # print('before_request', request.path)
     if request.path in required_login_list:
-        print('before_request', request.path)
         id = session.get('uid')
         if not id:
             return redirect(url_for('user.login'))
@@ -26,7 +25,6 @@ def before_request1():
             user = User.query.get(id)
             # g对象，本次请求的对象
             g.user = user
-
 
 # 首页
 @user_bp.route('/')
@@ -180,4 +178,4 @@ def user_change():
 # 用户中心
 @user_bp.route('/user/center')
 def user_center():
-    return render_template('user/center.html')
+    return render_template('user/center.html', user=g.user)
