@@ -1,7 +1,13 @@
 import json
 
+import os
+
+import hashlib
+import time
+
 from flask import Blueprint, render_template, current_app, request, session, redirect, url_for, jsonify, g
 from sqlalchemy import or_
+from werkzeug.utils import secure_filename
 
 from apps.user.models import User
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -159,6 +165,9 @@ def check_phone():
         return jsonify(code=200, msg='此号码可用')
 
 
+# 图片的扩展名
+ALLOWED_EXTENSIONS = ['jpg', 'png', 'gif', 'bmp', "jpeg"]
+
 # 修改用户信息
 @user_bp.route('/user/change', methods=["GET", "POST"])
 def user_change():
@@ -167,11 +176,28 @@ def user_change():
         phone = request.form.get('phone')
         email = request.form.get('email')
         icon = request.files.get('icon')
-        user = g.user
-        user.username = username
-        user.phone = phone
-        user.email = email
-        db.session.commit()
+        icon_name = icon.filename
+        suffix = icon_name.rsplit('.')[-1]
+        if icon_name:
+            if suffix in ALLOWED_EXTENSIONS:
+                file_path = os.path.join(current_app.config["UPLOAD_ICON_DIR"], icon_name)
+                icon.save(file_path)
+                user = g.user
+                user.username = username
+                user.phone = phone
+                user.email = email
+                user.icon = icon_name
+                db.session.commit()
+                return redirect(url_for('user.main'))
+            else:
+                return render_template('user/center.html', user=g.user, msg='必须是扩展名是：jpg,png,gif,bmp,jpeg格式')
+        else:
+            user = g.user
+            user.username = username
+            user.phone = phone
+            user.email = email
+            db.session.commit()
+            return redirect(url_for('user.main'))
     return render_template('user/center.html', user=g.user)
 
 

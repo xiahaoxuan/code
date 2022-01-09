@@ -12,6 +12,7 @@ class User(db.Model):
     password = db.Column(db.String(255), nullable=False)
     phone = db.Column(db.String(11), unique=True)  # 手机号必须唯一
     email = db.Column(db.String(30))   # 邮箱
+    icon = db.Column(db.String(255))
     create_time = db.Column(db.DateTime, default=datetime.datetime.now)  # 默认值
 
     # # repr()方法显示一个可读字符串，虽然不是完全必要，不过用于调试和测试还是很不错的。
