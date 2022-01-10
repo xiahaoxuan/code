@@ -10,9 +10,11 @@ from sqlalchemy import or_
 from werkzeug.utils import secure_filename
 
 from apps.user.models import User
+from apps.article.models import *
 from werkzeug.security import generate_password_hash, check_password_hash
 from ext import db
 from ext.smssend import SmsSendAPIDemo
+
 
 user_bp = Blueprint('user', __name__)
 
@@ -36,11 +38,12 @@ def before_request1():
 @user_bp.route('/')
 def main():
     uid = session.get('uid')
+    types = Article_type.query.all()
     if uid:  # 说明已经登录
         user = User.query.get(uid)
-        return render_template('user/index.html', user=user)
+        return render_template('user/index.html', user=user, types=types)
     else:
-        return render_template('user/index.html')
+        return render_template('user/index.html', types=types)
 
 
 # 注册
@@ -204,4 +207,5 @@ def user_change():
 # 用户中心
 @user_bp.route('/user/center')
 def user_center():
-    return render_template('user/center.html', user=g.user)
+    types = Article_type.query.all()
+    return render_template('user/center.html', user=g.user, types=types)

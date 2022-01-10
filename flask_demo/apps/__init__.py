@@ -5,7 +5,6 @@ from apps.user.view import user_bp
 from apps.article.view import article_bp
 
 
-
 def creat_app():
     app = Flask(__name__, template_folder='../templates', static_folder='../static')
     app.config.from_object(DefaultConfig)
