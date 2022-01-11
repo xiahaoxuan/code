@@ -13,7 +13,7 @@ class Article_type(db.Model):
 class Article(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     title = db.Column(db.String(50), nullable=False)
-    content = db.Column(db.Text, nullable=False)
+    content = db.Column(db.BLOB, nullable=False)
     pdatetime = db.Column(db.DateTime, default=datetime.now)
     click_num = db.Column(db.Integer, default=0)
     save_num = db.Column(db.Integer, default=0)

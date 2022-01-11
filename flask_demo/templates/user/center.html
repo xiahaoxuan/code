@@ -47,13 +47,13 @@
                     </p>
                     <p>
                         <select name="type" class="form-control">
-                            <option value="0">请选择文章分类</option>
-                            <option value="1">程序人生</option>
-                            <option value="2">慢生活</option>
-                            <option value="3">生活随笔</option>
-{#                            {% for type in types %}#}
-{#                                <option value="{{ type.id }}">{{ type.type_name }}</option>#}
-{#                            {% endfor %}#}
+{#                            <option value="0">请选择文章分类</option>#}
+{#                            <option value="1">程序人生</option>#}
+{#                            <option value="2">慢生活</option>#}
+{#                            <option value="3">生活随笔</option>#}
+                            {% for type in types %}
+                                <option value="{{ type.id }}">{{ type.type_name }}</option>
+                            {% endfor %}
 
                         </select>
                     </p>

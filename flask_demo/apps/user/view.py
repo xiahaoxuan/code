@@ -2,9 +2,6 @@ import json
 
 import os
 
-import hashlib
-import time
-
 from flask import Blueprint, render_template, current_app, request, session, redirect, url_for, jsonify, g
 from sqlalchemy import or_
 from werkzeug.utils import secure_filename
@@ -15,10 +12,9 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from ext import db
 from ext.smssend import SmsSendAPIDemo
 
-
 user_bp = Blueprint('user', __name__)
 
-required_login_list = ['/user/center', '/user/change']
+required_login_list = ['/user/center', '/user/change', '/article/publish']
 
 
 # ****重点*****
@@ -34,16 +30,24 @@ def before_request1():
             # g对象，本次请求的对象
             g.user = user
 
+
+@user_bp.app_template_filter('cdecode')
+def content_decode(content):
+    content = content.decode('utf-8')
+    return content[:500]
+
+
 # 首页
 @user_bp.route('/')
 def main():
     uid = session.get('uid')
     types = Article_type.query.all()
+    articles = Article.query.order_by(-Article.pdatetime).all()
     if uid:  # 说明已经登录
         user = User.query.get(uid)
-        return render_template('user/index.html', user=user, types=types)
+        return render_template('user/index.html', user=user, types=types, articles=articles)
     else:
-        return render_template('user/index.html', types=types)
+        return render_template('user/index.html', types=types, articles=articles)
 
 
 # 注册
@@ -137,7 +141,7 @@ def send_message():
             "mobile": phone,
             "templateId": "13484",
             "paramType": "json",
-            "params": json.dumps({"code":123})
+            "params": json.dumps({"code": 123})
         }
         api = common_api()
         ret = api.send(params)
@@ -146,6 +150,7 @@ def send_message():
         return jsonify(code=200, msg='短信发送成功！')
     else:
         return jsonify(code=400, msg='没有此用户信息')
+
 
 # 公共方法
 def common_api():
@@ -171,6 +176,7 @@ def check_phone():
 # 图片的扩展名
 ALLOWED_EXTENSIONS = ['jpg', 'png', 'gif', 'bmp', "jpeg"]
 
+
 # 修改用户信息
 @user_bp.route('/user/change', methods=["GET", "POST"])
 def user_change():
@@ -183,6 +189,7 @@ def user_change():
         suffix = icon_name.rsplit('.')[-1]
         if icon_name:
             if suffix in ALLOWED_EXTENSIONS:
+                icon_name = secure_filename(icon_name)
                 file_path = os.path.join(current_app.config["UPLOAD_ICON_DIR"], icon_name)
                 icon.save(file_path)
                 user = g.user
