@@ -1,4 +1,4 @@
-from flask import Blueprint, request, g, redirect, url_for
+from flask import Blueprint, request, g, redirect, url_for, render_template, jsonify
 from apps.article.models import *
 
 article_bp = Blueprint('article', __name__)
@@ -19,3 +19,25 @@ def publish_article():
         db.session.commit()
         return redirect(url_for('user.main'))
 
+
+@article_bp.route('/article/detail')
+def article_detail():
+    detail_id = request.args.get('aid')
+    article = Article.query.get(detail_id)
+    # 获取文章分类
+    types = Article_type.query.all()
+    return render_template('article/detail.html', article=article, types=types, user=g.user)
+
+
+@article_bp.route('/love')
+def article_love():
+    article_id = request.args.get('aid')
+    tag = request.args.get('tag')
+
+    article = Article.query.get(article_id)
+    if tag == '1':
+        article.love_num -= 1
+    else:
+        article.love_num += 1
+    db.session.commit()
+    return jsonify(num=article.love_num)

@@ -14,7 +14,7 @@ from ext.smssend import SmsSendAPIDemo
 
 user_bp = Blueprint('user', __name__)
 
-required_login_list = ['/user/center', '/user/change', '/article/publish']
+required_login_list = ['/user/center', '/user/change', '/article/publish', '/article/detail']
 
 
 # ****重点*****
@@ -48,6 +48,10 @@ def main():
         return render_template('user/index.html', user=user, types=types, articles=articles)
     else:
         return render_template('user/index.html', types=types, articles=articles)
+
+
+
+
 
 
 # 注册
