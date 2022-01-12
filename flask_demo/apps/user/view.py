@@ -42,12 +42,18 @@ def content_decode(content):
 def main():
     uid = session.get('uid')
     types = Article_type.query.all()
-    articles = Article.query.order_by(-Article.pdatetime).all()
+    # articles = Article.query.order_by(-Article.pdatetime).all()
+    page = request.args.get('page', 1)
+    if request.args.get('page', 1) and page != 'None':
+        page = int(request.args["page"])
+    else:
+        page = 1
+    pagination = Article.query.order_by(-Article.pdatetime).paginate(page=page, per_page=3)
     if uid:  # 说明已经登录
         user = User.query.get(uid)
-        return render_template('user/index.html', user=user, types=types, articles=articles)
+        return render_template('user/index.html', user=user, types=types, pagination=pagination)
     else:
-        return render_template('user/index.html', types=types, articles=articles)
+        return render_template('user/index.html', types=types, pagination=pagination)
 
 
 
