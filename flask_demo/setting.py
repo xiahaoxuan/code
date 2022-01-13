@@ -1,5 +1,6 @@
 import os
 
+
 class DefaultConfig(object):
     """
     默认配置
@@ -25,7 +26,6 @@ class DefaultConfig(object):
     # 缓存
     SECRET_KEY = 'kdjklfjkd87384hjdhjh'
 
-
     # 网易秘钥
     WANGYI_SECRET_ID = "15b731d381bce5120d5a82fa87818484"
     WANGYI_SECRET_KEY = "090be1319d966d926f320681e2069dc1"
@@ -40,3 +40,7 @@ class DefaultConfig(object):
     UPLOAD_ICON_DIR = os.path.join(STATIC_DIR, 'upload/icon')
     # 相册的上传目录
     UPLOAD_PHOTO_DIR = os.path.join(STATIC_DIR, 'upload/photo')
+
+    # 七牛秘钥私钥
+    QINIU_ACCESS_KEY = "IRJpnGmt9BAqCeIwzX2PES5MCOqOE2ivHWWiaAsh"
+    QINIU_SECRET_KEY = "ZySl4CPpGv5s5m68t1isIWreWlVwaC6RT3JEATdl"

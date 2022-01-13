@@ -47,10 +47,10 @@
                     </p>
                     <p>
                         <select name="type" class="form-control">
-{#                            <option value="0">请选择文章分类</option>#}
-{#                            <option value="1">程序人生</option>#}
-{#                            <option value="2">慢生活</option>#}
-{#                            <option value="3">生活随笔</option>#}
+                            {#                            <option value="0">请选择文章分类</option>#}
+                            {#                            <option value="1">程序人生</option>#}
+                            {#                            <option value="2">慢生活</option>#}
+                            {#                            <option value="3">生活随笔</option>#}
                             {% for type in types %}
                                 <option value="{{ type.id }}">{{ type.type_name }}</option>
                             {% endfor %}
@@ -69,7 +69,29 @@
 
                 </form>
             </div>
-            <div class="right1" style="background-color: #00ff80"></div>
+            <div class="right1">
+                <form action="{{ url_for('article.upload_photo') }}" method="post" enctype="multipart/form-data"
+                      class="form-inline">
+                    <input type="file" name="photo" class="form-control">
+                    <input type="submit" value="上传相册" class="btn btn-default">
+                </form>
+                <div class="row">
+                    {% for photo in photos %}
+                        <div class="col-xs-8 col-md-6">
+                            <a href="#" class="thumbnail">
+                                <img style="height: 150px;"
+                                     src="http://r5jwo76nk.hn-bkt.clouddn.com/{{ photo.photo_name }}"
+                                     class="img-responsive center-block img-rounded">
+                            </a>
+                            <div class="caption">
+                                <p><a href="#" class="btn btn-primary" role="button">删除</a></p>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+
+
+            </div>
             <div class="right1" style="background-color: darkgreen"></div>
             <div class="right1" style="padding-top: 30px">
                 <form action="{{ url_for('user.user_change') }}" method="post" enctype="multipart/form-data">

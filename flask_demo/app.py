@@ -1,5 +1,6 @@
 from apps import creat_app
 from apps.article.models import *
+from apps.user.models import *
 from ext import db, bootstrap
 from flask_migrate import Migrate
 

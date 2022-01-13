@@ -6,7 +6,7 @@ from flask import Blueprint, render_template, current_app, request, session, red
 from sqlalchemy import or_
 from werkzeug.utils import secure_filename
 
-from apps.user.models import User
+from apps.user.models import User, Photo
 from apps.article.models import *
 from werkzeug.security import generate_password_hash, check_password_hash
 from ext import db
@@ -14,7 +14,8 @@ from ext.smssend import SmsSendAPIDemo
 
 user_bp = Blueprint('user', __name__)
 
-required_login_list = ['/user/center', '/user/change', '/article/publish', '/article/detail']
+required_login_list = ['/user/center', '/user/change', '/article/publish', '/article/detail', '/photo/upload',
+                       '/user/myphoto']
 
 
 # ****重点*****
@@ -45,7 +46,7 @@ def main():
     # articles = Article.query.order_by(-Article.pdatetime).all()
     page = request.args.get('page', 1)
     if request.args.get('page', 1) and page != 'None':
-        page = int(request.args["page"])
+        page = page
     else:
         page = 1
     pagination = Article.query.order_by(-Article.pdatetime).paginate(page=page, per_page=3)
@@ -54,10 +55,6 @@ def main():
         return render_template('user/index.html', user=user, types=types, pagination=pagination)
     else:
         return render_template('user/index.html', types=types, pagination=pagination)
-
-
-
-
 
 
 # 注册
@@ -225,4 +222,14 @@ def user_change():
 @user_bp.route('/user/center')
 def user_center():
     types = Article_type.query.all()
-    return render_template('user/center.html', user=g.user, types=types)
+    photos = Photo.query.filter(Photo.user_id == g.user.id).all()
+    return render_template('user/center.html', user=g.user, types=types, photos=photos)
+
+
+# 我的相册
+@user_bp.route('/user/myphoto')
+def myphoto():
+    page = int(request.args.get('page', 1))
+    # 分页操作
+    photos = Photo.query.paginate(page=page, per_page=3)
+    return render_template('user/myphoto.html', photos=photos, user=g.user)

@@ -1,5 +1,7 @@
 from flask import Blueprint, request, g, redirect, url_for, render_template, jsonify
 from apps.article.models import *
+from apps.user.models import Photo
+from ext.qiniu_storage import upload_qiniu
 
 article_bp = Blueprint('article', __name__)
 
@@ -41,3 +43,18 @@ def article_love():
         article.love_num += 1
     db.session.commit()
     return jsonify(num=article.love_num)
+
+
+@article_bp.route('/photo/upload', methods=["GET", "POST"])
+def upload_photo():
+    photo_file = request.files.get('photo')
+    ret, info = upload_qiniu(photo_file)
+    if info.status_code == 200:
+        photo = Photo()
+        photo.photo_name = ret['key']
+        photo.user_id = g.user.id
+        db.session.add(photo)
+        db.session.commit()
+        return '上传成功！'
+    else:
+        return '上传失败！'
