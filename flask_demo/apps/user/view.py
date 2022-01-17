@@ -1,6 +1,7 @@
 import json
 
 import os
+import time
 
 from flask import Blueprint, render_template, current_app, request, session, redirect, url_for, jsonify, g
 from sqlalchemy import or_
@@ -9,7 +10,7 @@ from werkzeug.utils import secure_filename
 from apps.user.models import User, Photo
 from apps.article.models import *
 from werkzeug.security import generate_password_hash, check_password_hash
-from ext import db
+from ext import db, cache
 from ext.smssend import SmsSendAPIDemo
 
 user_bp = Blueprint('user', __name__)
@@ -23,7 +24,8 @@ required_login_list = ['/user/center', '/user/change', '/article/publish', '/art
 def before_request1():
     # print('before_request', request.path)
     if request.path in required_login_list:
-        id = session.get('uid')
+        # id = session.get('uid')
+        id = cache.get('uid')
         if not id:
             return redirect(url_for('user.login'))
         else:
@@ -40,10 +42,12 @@ def content_decode(content):
 
 # 首页
 @user_bp.route('/')
+@cache.cached(timeout=60)
 def main():
-    uid = session.get('uid')
+    # uid = session.get('uid')
+
+    uid = cache.get('uid')
     types = Article_type.query.all()
-    # articles = Article.query.order_by(-Article.pdatetime).all()
     page = request.args.get('page', 1)
     if request.args.get('page', 1) and page != 'None':
         page = int(page)
@@ -55,6 +59,7 @@ def main():
         return render_template('user/index.html', user=user, types=types, pagination=pagination)
     else:
         return render_template('user/index.html', types=types, pagination=pagination)
+
 
 
 # 注册
@@ -99,7 +104,9 @@ def login():
             if user:
                 flag = check_password_hash(user.password, password)
                 if flag:
-                    session["uid"] = user.id
+                    # session["uid"] = user.id
+                    is_login = cache.set('uid', user.id, timeout=3600)
+
                     return redirect(url_for('user.main'))
                 else:
                     return render_template('user/login.html', msg='用户名或密码错误')
@@ -108,7 +115,8 @@ def login():
         elif f == '2':  # 手机号码登录
             phone = request.form.get('phone')
             code = request.form.get('code')
-            requestId = session.get(phone)
+            # requestId = session.get(phone)
+            requestId = cache.get(phone)
             # 验证code
             params = {
                 "requestId": requestId,
@@ -122,7 +130,8 @@ def login():
             print(user)
             if user:
                 # 登录成功
-                session['uid'] = user.id
+                # session['uid'] = user.id
+                cache.set('uid', user.id, timeout=3600)
                 return redirect(url_for('user.main'))
             else:
                 return render_template('user/login.html', msg='此号码未注册')
@@ -134,7 +143,8 @@ def login():
 # 退出
 @user_bp.route('/logout')
 def logout():
-    session.clear()
+    # session.clear()
+    cache.delete('uid')
     return redirect(url_for('user.main'))
 
 
@@ -153,7 +163,8 @@ def send_message():
         api = common_api()
         ret = api.send(params)
         print(ret)
-        session[phone] = '189075'
+        # session[phone] = '189075'
+        is_code = cache.set(phone, '189075')
         return jsonify(code=200, msg='短信发送成功！')
     else:
         return jsonify(code=400, msg='没有此用户信息')

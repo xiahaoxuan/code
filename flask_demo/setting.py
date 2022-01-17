@@ -44,3 +44,17 @@ class DefaultConfig(object):
     # 七牛秘钥私钥
     QINIU_ACCESS_KEY = "IRJpnGmt9BAqCeIwzX2PES5MCOqOE2ivHWWiaAsh"
     QINIU_SECRET_KEY = "ZySl4CPpGv5s5m68t1isIWreWlVwaC6RT3JEATdl"
+
+    # redis缓存
+    CACHE_TYPE = 'redis'
+    CACHE_REDIS_HOST = '101.33.211.216'
+    CACHE_REDIS_PORT = 6379
+    CACHE_REDIS_DB = 2
+    # CACHE_TYPE = 'redis' # 使用redis作为缓存
+    # CACHE_KEY_PREFIX # 设置cache_key的前缀
+    # CACHE_REDIS_HOST  # redis地址
+    # CACHE_REDIS_PORT  # redis端口
+    # CACHE_REDIS_PASSWORD # redis密码
+    # CACHE_REDIS_DB # 使用哪个数据库
+    # # 也可以一键配置
+    # CACHE_REDIS_URL	连接到Redis服务器的URL。示例redis://user:password@localhost:6379/2
