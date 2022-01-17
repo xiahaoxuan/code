@@ -11,7 +11,7 @@ class DefaultConfig(object):
     DEBUG = True
 
     # 数据库配置
-    HOST = 'localhost'
+    HOST = '101.33.211.216'
     PORT = '3306'
     DATABASE = 'xhx_study'
     USERNAME = 'root'

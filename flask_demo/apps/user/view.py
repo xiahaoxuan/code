@@ -46,7 +46,7 @@ def main():
     # articles = Article.query.order_by(-Article.pdatetime).all()
     page = request.args.get('page', 1)
     if request.args.get('page', 1) and page != 'None':
-        page = page
+        page = int(page)
     else:
         page = 1
     pagination = Article.query.order_by(-Article.pdatetime).paginate(page=page, per_page=3)
