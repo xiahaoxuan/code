@@ -14,18 +14,18 @@ for index in range(0, sheet.nrows):
     temp = {}
     if index > 0:
         cells = sheet.row_slice(index, 0, 15)
-        if cells[2].value not in people_list:
+        if cells[1].value not in people_list:
             money = float(cells[7].value) + float(cells[8].value) - float(cells[10].value) - float(
                 cells[11].value) + float(cells[12].value)
             temp["name"] = cells[1].value
             temp["number"] = cells[2].value
-            temp["id_number"] = cells[4].value
+            temp["id_number"] = cells[4].value.replace('C', 'G')
             temp["money"] = money
             money_list.append(temp)
-            people_list.append(cells[2].value)
+            people_list.append(temp["name"])
         else:
             for dict_money in money_list:
-                if cells[3].value == dict_money["number"]:
+                if cells[1].value == dict_money["name"]:
                     money = float(cells[7].value) + float(cells[8].value) - float(cells[10].value) - float(
                         cells[11].value) + float(cells[12].value) + dict_money["money"]
                     dict_money["money"] = money

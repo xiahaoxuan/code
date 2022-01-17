@@ -7,8 +7,13 @@ sheet = workbook.sheet_by_index(0)
 
 pay_list = []
 for index in range(1, sheet.nrows):
+    temp = {}
     cell = sheet.row_slice(index, 0, 4)
-    pay_list.append(cell[0].value)
+    temp["name"] = cell[0].value
+    temp["number"] = cell[1].value
+    temp["id_number"] = cell[2].value
+    temp["money"] = cell[3].value
+    pay_list.append(temp)
 
 print('充值人数{}'.format(len(pay_list)))
 
@@ -18,37 +23,35 @@ sheet_1 = workbook_1.sheet_by_index(0)
 
 people_list = []
 for index in range(1, sheet_1.nrows):
-    temp = {}
     cell = sheet_1.row_slice(index, 0, 3)
-    temp["grade"] = cell[0].value
-    temp["id_number"] = cell[1].value
-    temp["name"] = cell[2].value
-    people_list.append(temp)
+    people_list.append(cell[2].value)
 
 print('寄宿人数{}'.format(len(people_list)))
 not_pay_list = []
-for people in people_list:
-    if people["name"] not in pay_list:
-        not_pay_list.append(people)
-print('未充值{}'.format(len(not_pay_list)))
+for pay in pay_list:
+    if pay["name"] not in people_list:
+        not_pay_list.append(pay)
+print('未寄宿充值人数{}'.format(len(not_pay_list)))
 
 
 def export_excel(export):
     # 将字典列表转换为DataFrame
     pf = pd.DataFrame(list(export))
     # 指定字段顺序
-    order = ['grade', 'id_number', 'name']
+    order = ['name', 'number', 'id_number', 'money']
     pf = pf[order]
     # 将列名替换为中文
     columns_map = {
-        'grade': '班级',
-        'id_number': '证件号码',
         'name': '姓名',
+        'number': '电子卡号',
+        'id_number': '证件号码',
+        'money': '充值金额'
+
     }
     pf.rename(columns=columns_map, inplace=True)
     # 指定生成的Excel表格名称
     # is_path = os.path.exists('index_before.xlsx')
-    file_path = pd.ExcelWriter("未充值名单信息.xls")
+    file_path = pd.ExcelWriter("未寄宿充值名单信息.xls")
     # 替换空单元格
     pf.fillna(' ', inplace=True)
     # 输出
@@ -58,19 +61,3 @@ def export_excel(export):
 
 
 export_excel(not_pay_list)
-
-
-def find_repeat_data(name_list):
-    """
-    查找列表中重复的数据
-    :param name_list:
-    :return: 一个重复数据的列表，列表中字典的key 是重复的数据，value 是重复的次数
-    """
-    repeat_list = []
-    for i in set(name_list):
-        ret = name_list.count(i)  # 查找该数据在原列表中的个数
-        if ret > 1:
-            item = dict()
-            item[i] = ret
-            repeat_list.append(item)
-    return repeat_list
