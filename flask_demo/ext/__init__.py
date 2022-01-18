@@ -8,5 +8,6 @@ bootstrap = Bootstrap()
 cache = Cache(config={'CACHE_TYPE': DefaultConfig.CACHE_TYPE,
                       'CACHE_REDIS_HOST': DefaultConfig.CACHE_REDIS_HOST,
                       'CACHE_REDIS_PORT': DefaultConfig.CACHE_REDIS_PORT,
-                      'CACHE_REDIS_DB': DefaultConfig.CACHE_REDIS_DB})
+                      'CACHE_REDIS_DB': DefaultConfig.CACHE_REDIS_DB,
+                      'CACHE_KEY_PREFIX': DefaultConfig.CACHE_KEY_PREFIX})
 

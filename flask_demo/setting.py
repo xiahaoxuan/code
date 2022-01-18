@@ -49,9 +49,9 @@ class DefaultConfig(object):
     CACHE_TYPE = 'redis'
     CACHE_REDIS_HOST = '101.33.211.216'
     CACHE_REDIS_PORT = 6379
-    CACHE_REDIS_DB = 2
+    CACHE_REDIS_DB = 1
     # CACHE_TYPE = 'redis' # 使用redis作为缓存
-    # CACHE_KEY_PREFIX # 设置cache_key的前缀
+    CACHE_KEY_PREFIX = "" # 设置cache_key的前缀
     # CACHE_REDIS_HOST  # redis地址
     # CACHE_REDIS_PORT  # redis端口
     # CACHE_REDIS_PASSWORD # redis密码

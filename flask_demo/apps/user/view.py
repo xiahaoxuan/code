@@ -45,6 +45,8 @@ def content_decode(content):
 @cache.cached(timeout=60)
 def main():
     # uid = session.get('uid')
+    name = 'xiahaoxuan'
+    is_ture = cache.set('user:' + name, {"name": "zhangsan", "age": 13, "addr": "北京"})
 
     uid = cache.get('uid')
     types = Article_type.query.all()
@@ -59,7 +61,6 @@ def main():
         return render_template('user/index.html', user=user, types=types, pagination=pagination)
     else:
         return render_template('user/index.html', types=types, pagination=pagination)
-
 
 
 # 注册
