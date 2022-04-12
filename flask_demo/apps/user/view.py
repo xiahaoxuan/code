@@ -46,7 +46,7 @@ def content_decode(content):
 def main():
     # uid = session.get('uid')
     name = 'xiahaoxuan'
-    is_ture = cache.set('user:' + name, {"name": "zhangsan", "age": 13, "addr": "北京"})
+    is_ture = cache.set('user:' + name, {"user": {"name": "zhangsan", "age": 13, "addr": "北京"}})
 
     uid = cache.get('uid')
     types = Article_type.query.all()
